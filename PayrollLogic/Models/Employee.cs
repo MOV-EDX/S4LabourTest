@@ -12,7 +12,15 @@ namespace PayrollLogic.Model
 
         public static Employee CreateEmployee(string forename, string surname, DateTime employmentStartDate, PayFrequency payFrequency, decimal rateOfPay, SickPay sickPay)
         {
-            // TODO: Perform validation here
+            if (string.IsNullOrWhiteSpace(forename))
+            {
+                throw new ArgumentException($"{nameof(Forename)} can't be null, empty or whitespace");
+            }
+
+            if (string.IsNullOrWhiteSpace(surname)) 
+            {
+                throw new ArgumentException($"{nameof(Surname)} can't be null, empty or whitespace");
+            }
 
             var employee = new Employee
             {
@@ -50,6 +58,21 @@ namespace PayrollLogic.Model
 
         public decimal CalculateSalary(DateTime weekStart, int hours, int minutes, int sickDays)
         {
+            if (hours < 0)
+            {
+                throw new ArgumentException($"{nameof(hours)} must be 0 or greater");
+            }
+
+            if (minutes < 0)
+            {
+                throw new ArgumentException($"{nameof(minutes)} must be 0 or greater");
+            }
+
+            if (sickDays < 0)
+            {
+                throw new ArgumentException($"{nameof(sickDays)} must be 0 or greater");
+            }
+
             var weeklyPay = CalculateWeeklyPay(hours, minutes, sickDays);
             var sickPay = CalculateSickPay(DateOnly.FromDateTime(weekStart), sickDays);
             var totalDeductions = CalculateDeductions(weeklyPay, sickPay);

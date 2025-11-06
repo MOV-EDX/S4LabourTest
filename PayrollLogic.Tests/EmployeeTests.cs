@@ -1,5 +1,6 @@
 ﻿using PayrollLogic.Enums;
 using PayrollLogic.Model;
+using System.Security.Cryptography;
 
 namespace PayrollLogic.Tests
 {
@@ -109,6 +110,42 @@ namespace PayrollLogic.Tests
 
             // Assert
             Assert.AreEqual(result, (decimal)expectedSalary);
+        }
+
+        [TestMethod]
+        [DataRow(-1, 1, 1)]
+        [DataRow(1, -1, 1)]
+        [DataRow(1, 1, -1)]
+        public void CalculateSalary_InvalidArguments_Test(int hours, int minutes, int sickDays)
+        {
+            // Arrange
+            var employee = Employee.CreateEmployee("Test", "Testing", DateTime.Now.AddYears(-1), PayFrequency.Hourly, 17.50m, SickPay.SSP);
+
+            // Act, Assert
+            Assert.ThrowsException<ArgumentException>(() => employee.CalculateSalary(DateTime.Now, hours, minutes, sickDays));
+        }
+
+        [TestMethod]
+        public void CreateEmployeeTest()
+        {
+            // Arrange, Act
+            var employee = Employee.CreateEmployee("Test", "Testing", DateTime.Now.AddYears(-1), PayFrequency.Hourly, 17.50m, SickPay.SSP);
+
+            // Assert
+            Assert.IsNotNull(employee);
+        }
+
+        [TestMethod]
+        [DataRow("", "Test")]
+        [DataRow(" ", "Test")]
+        [DataRow(null, "Test")]
+        [DataRow("Test", "")]
+        [DataRow("Test", " ")]
+        [DataRow("Test", null)]
+        public void CreateEmployee_InvalidName_Test(string forename, string surname)
+        {
+            // Arrange, Act, Assert
+            Assert.ThrowsException<ArgumentException>(() => Employee.CreateEmployee(forename, surname, DateTime.Now, PayFrequency.Annual, 20000m, SickPay.SSP));
         }
     }
 }
