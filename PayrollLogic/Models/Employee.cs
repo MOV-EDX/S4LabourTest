@@ -136,7 +136,7 @@ namespace PayrollLogic.Model
             }
 
             // Check if the employee has been set as COSP, and have worked for at least 5 years at the company
-            if (SickPayScheme is SickPay.COSP && PayFrequency is not PayFrequency.Hourly && (EmploymentStartDate < weekStarting.AddYears(-5)))
+            if (SickPayScheme is SickPay.COSP && PayFrequency is not PayFrequency.Hourly && (EmploymentStartDate <= weekStarting.AddYears(-5)))
             {
                 return sickDays switch
                 {
