@@ -1,6 +1,5 @@
 ﻿using PayrollLogic.Enums;
 using PayrollLogic.Model;
-using System.Security.Cryptography;
 
 namespace PayrollLogic.Tests
 {
